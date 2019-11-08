@@ -1,7 +1,7 @@
 package sample;
 
 public class SniperTower extends Tower {
-    public SniperTower(sample.image image, int x, int y, Bullet bullet) {
-        super(image, x, y, bullet);
+    public SniperTower(int x, int y, Bullet bullet) {
+        super(new image("file:images\\SpinerTower.png"), x, y, bullet);
     }
 }
