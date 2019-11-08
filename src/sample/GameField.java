@@ -1,8 +1,12 @@
 package sample;
-import javafx.scene.Scene;
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
-import sample.Config;
+
+import javafx.scene.image.ImageView;
 import java.io.*;
 
 
@@ -24,33 +28,23 @@ public class GameField {
     }
 
     //method
-    public void loadMapfromfile (String namefile)  throws IOException
+    public void loadAndRenderMapfromfile (String namefile, Stage stage, int x, int y)  throws IOException
     {
         BufferedReader buffread = new BufferedReader (new FileReader(namefile));
         for(int i=0;i<Config.heigth_amountimage;i++)
         {
+            //read from file
             arrmap[i] = buffread.readLine().split(" ");
-        }
-    }
-    public void loadImageMap()
-    {
-        for(int i=0;i<Config.heigth_amountimage;i++)
-        {
             for(int j=0;j<Config.width_amountimage;j++)
             {
+                //load image map
                 gameEntities[i][j] = new GameEntity(new image("file:images\\"+arrmap[i][j]+".png"));
-            }
-        }
-    }
-    public void rendermap(Stage stage, int x,int y)
-    {
-        for(int i=0;i<Config.heigth_amountimage;i++)
-        {
-            for(int j=0;j<Config.width_amountimage;j++)
-            {
+
+                //render map
                 gameEntities[i][j].image.show(stage,x,y);
                 x+=Config.sizeimageMap;
             }
+
             y+=Config.sizeimageMap;
             x=0;
         }
