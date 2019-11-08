@@ -30,6 +30,22 @@ public class Main extends Application {
         gameField.rendermap(primaryStage,0,0);
         GameStage gameStage = new GameStage(13);
         gameStage.loadArrayEnemy("arrEnemy.txt");
+        
+        
+        Config.pane.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (event.isPrimaryButtonDown()){
+                    Config.x_pos = ((int)event.getX()/Config.sizeimageMap)*Config.sizeimageMap;
+                    Config.y_pos = ((int)event.getY()/Config.sizeimageMap)*Config.sizeimageMap;
+                    HighDamage tower = new HighDamage(Config.x_pos, Config.y_pos);
+                    tower.shoot(primaryStage, tankerEnemy1);
+                    tower.towerBuild(primaryStage);
+                }
+            }
+        });
+        
+        
 
         Bullet bullet2 = new Bullet(new image("file:images\\bullet.png"),100,100,100);
         Tower tower = new Tower(null,bullet2);
