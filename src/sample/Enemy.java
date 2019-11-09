@@ -14,6 +14,7 @@ public class Enemy extends GameEntity {
     protected int armor;
     protected int bonus;
     protected boolean danger;
+    protected int distant = 0;
 
     public boolean isDanger() {
         return danger;
@@ -178,6 +179,7 @@ public class Enemy extends GameEntity {
         }
         return "finish";
     }
+
     public void die()
     {
         this.getimage().remote();
@@ -188,4 +190,10 @@ public class Enemy extends GameEntity {
     }
 
 
+    public boolean equals(Enemy enemy) {
+        if (this.x != enemy.x) return false;
+        if (this.y != enemy.y) return false;
+        if (!this.image.equals(enemy.image)) return false;
+        return true;
+    }
 }
