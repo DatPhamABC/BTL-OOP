@@ -3,14 +3,20 @@ package sample;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Stack;
 
 public class Tower extends GameEntity {
@@ -18,6 +24,7 @@ public class Tower extends GameEntity {
     private boolean enemyTarget=false;
     public static ArrayList<Enemy> arrayList = new ArrayList<>();
     private static  int count=0;
+    private Queue<Enemy> enemyQueue = new LinkedList<>();
 
     public static int getCount() {
         return count;
@@ -127,6 +134,78 @@ public class Tower extends GameEntity {
                         event -> { Config.pane.getChildren().remove(circle); }));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
+    }
+
+    protected static void towerSpawnOnMap(Stage primaryStage, Bullet bullet2){
+        Config.pane.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if(event.getCode() == KeyCode.DIGIT1){
+                    Config.normalTowerBuilt = true;
+                    Config.sniperTowerBuilt = false;
+                    Config.MGTowerBuilt = false;
+                }
+                if (event.getCode() == KeyCode.DIGIT2){
+                    Config.normalTowerBuilt = false;
+                    Config.sniperTowerBuilt = true;
+                    Config.MGTowerBuilt = false;
+                }
+                if (event.getCode() == KeyCode.DIGIT3){
+                    Config.normalTowerBuilt = false;
+                    Config.sniperTowerBuilt = false;
+                    Config.MGTowerBuilt = true;
+                }
+                if (event.getCode() == KeyCode.DIGIT0){
+                    Config.normalTowerBuilt = false;
+                    Config.sniperTowerBuilt = false;
+                    Config.MGTowerBuilt = false;
+                }
+            }
+        });
+
+
+        Config.pane.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (event.isPrimaryButtonDown()){
+                    Config.x_pos = ((int)event.getX()/Config.sizeimageMap)*Config.sizeimageMap;
+                    Config.y_pos = ((int)event.getY()/Config.sizeimageMap)*Config.sizeimageMap;
+                    if (GameField.arrmap[(Config.y_pos / Config.sizeimageMap)][(Config.x_pos / Config.sizeimageMap)].equals("2")) {
+                        if (Config.normalTowerBuilt == true) {
+                            NormalTower tower = new NormalTower(Config.x_pos, Config.y_pos, bullet2);
+                            tower.towerBuild(primaryStage);
+                        }else{
+                            if (Config.sniperTowerBuilt == true){
+                                SniperTower tower = new SniperTower(Config.x_pos, Config.y_pos, bullet2);
+                                tower.towerBuild(primaryStage);
+                            } else {
+                                if (Config.MGTowerBuilt == true){
+                                    MachineGunTower tower = new MachineGunTower(Config.x_pos, Config.y_pos, bullet2);
+                                    tower.towerBuild(primaryStage);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+
+    public void enemyAdd(Enemy enemy){
+        if (!enemyQueue.peek().equals(enemy)) {
+            if (canShoot1(this.x, this.y, 200, enemy.x, enemy.y)) {
+                enemyQueue.add(enemy);
+            }
+        }
+    }
+
+    public void priorityShoot(Stage stage, Enemy enemy){
+        if (canShoot1(this.x, this.y, 200, enemyQueue.peek().x, enemyQueue.peek().y)){
+            shoot(stage, enemy);
+        } else{
+            enemyQueue.poll();
+        }
     }
 
 }
