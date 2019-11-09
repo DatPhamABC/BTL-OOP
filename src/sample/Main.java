@@ -53,58 +53,7 @@ public class Main extends Application {
 //        primaryStage.show();
 
 
-        Config.pane.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if(event.getCode() == KeyCode.DIGIT1){
-                    Config.normalTowerBuilt = true;
-                    Config.sniperTowerBuilt = false;
-                    Config.MGTowerBuilt = false;
-                }
-                if (event.getCode() == KeyCode.DIGIT2){
-                    Config.normalTowerBuilt = false;
-                    Config.sniperTowerBuilt = true;
-                    Config.MGTowerBuilt = false;
-                }
-                if (event.getCode() == KeyCode.DIGIT3){
-                    Config.normalTowerBuilt = false;
-                    Config.sniperTowerBuilt = false;
-                    Config.MGTowerBuilt = true;
-                }
-                if (event.getCode() == KeyCode.DIGIT0){
-                    Config.normalTowerBuilt = false;
-                    Config.sniperTowerBuilt = false;
-                    Config.MGTowerBuilt = false;
-                }
-            }
-        });
-
-
-        Config.pane.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (event.isPrimaryButtonDown()){
-                    Config.x_pos = ((int)event.getX()/Config.sizeimageMap)*Config.sizeimageMap;
-                    Config.y_pos = ((int)event.getY()/Config.sizeimageMap)*Config.sizeimageMap;
-                    if (GameField.arrmap[(Config.y_pos / Config.sizeimageMap)][(Config.x_pos / Config.sizeimageMap)].equals("2")) {
-                        if (Config.normalTowerBuilt == true) {
-                            NormalTower tower = new NormalTower(Config.x_pos, Config.y_pos, bullet2);
-                            tower.towerBuild(primaryStage);
-                        }else{
-                            if (Config.sniperTowerBuilt == true){
-                                SniperTower tower = new SniperTower(Config.x_pos, Config.y_pos, bullet2);
-                                tower.towerBuild(primaryStage);
-                            } else {
-                                if (Config.MGTowerBuilt == true){
-                                    MachineGunTower tower = new MachineGunTower(Config.x_pos, Config.y_pos, bullet2);
-                                    tower.towerBuild(primaryStage);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        });
+        Tower.towerSpawnOnMap(primaryStage, bullet2);
 
         Stack<Enemy> newStack =gameStage.getStackEnemy();
         Stack<Enemy> newStack1 =gameStage.getStackEnemy();
