@@ -57,7 +57,6 @@ public class Main extends Application {
             @Override
             public void handle(KeyEvent event) {
                 if(event.getCode() == KeyCode.DIGIT1){
-                    System.out.println("keycode 1 pressed");
                     Config.normalTowerBuilt = true;
                     Config.sniperTowerBuilt = false;
                     Config.MGTowerBuilt = false;
