@@ -137,59 +137,47 @@ public class Tower extends GameEntity {
     }
 
     protected static void towerSpawnOnMap(Stage primaryStage, Bullet bullet2){
-        Config.pane.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if(event.getCode() == KeyCode.DIGIT1){
-                    Config.normalTowerBuilt = true;
-                    Config.sniperTowerBuilt = false;
-                    Config.MGTowerBuilt = false;
-                }
-                if (event.getCode() == KeyCode.DIGIT2){
-                    Config.normalTowerBuilt = false;
-                    Config.sniperTowerBuilt = true;
-                    Config.MGTowerBuilt = false;
-                }
-                if (event.getCode() == KeyCode.DIGIT3){
-                    Config.normalTowerBuilt = false;
-                    Config.sniperTowerBuilt = false;
-                    Config.MGTowerBuilt = true;
-                }
-                if (event.getCode() == KeyCode.DIGIT0){
-                    Config.normalTowerBuilt = false;
-                    Config.sniperTowerBuilt = false;
-                    Config.MGTowerBuilt = false;
-                }
-            }
-        });
-
-
         Config.pane.setOnMousePressed(new EventHandler<MouseEvent>() {
+            Image towerMenu = new Image("file:images\\towerMenu.png");
+            ImageView menuView = new ImageView(towerMenu);
             @Override
             public void handle(MouseEvent event) {
                 if (event.isPrimaryButtonDown()){
                     Config.x_pos = ((int)event.getX()/Config.sizeimageMap)*Config.sizeimageMap;
                     Config.y_pos = ((int)event.getY()/Config.sizeimageMap)*Config.sizeimageMap;
                     if (GameField.arrmap[(Config.y_pos / Config.sizeimageMap)][(Config.x_pos / Config.sizeimageMap)].equals("2")) {
-                        if (Config.normalTowerBuilt == true) {
-                            NormalTower tower = new NormalTower(Config.x_pos, Config.y_pos, bullet2);
-                            tower.towerBuild(primaryStage);
-                        }else{
-                            if (Config.sniperTowerBuilt == true){
-                                SniperTower tower = new SniperTower(Config.x_pos, Config.y_pos, bullet2);
-                                tower.towerBuild(primaryStage);
-                            } else {
-                                if (Config.MGTowerBuilt == true){
+                        menuView.setFitHeight(70);
+                        menuView.setFitWidth(120);
+                        menuView.setX(Config.x_pos - Config.sizeimageMap/2);
+                        menuView.setY(Config.y_pos - (menuView.getFitHeight()/2));
+                        try {
+                            Config.pane.getChildren().add(menuView);
+                        } catch (IllegalArgumentException e){}
+
+                        Config.pane.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                            @Override
+                            public void handle(KeyEvent event) {
+                                if(event.getCode() == KeyCode.DIGIT2){
+                                    Config.pane.getChildren().remove(menuView);
+                                    NormalTower tower = new NormalTower(Config.x_pos, Config.y_pos, bullet2);
+                                    tower.towerBuild(primaryStage);
+                                }
+                                if (event.getCode() == KeyCode.DIGIT3){
+                                    Config.pane.getChildren().remove(menuView);
+                                    SniperTower tower = new SniperTower(Config.x_pos, Config.y_pos, bullet2);
+                                    tower.towerBuild(primaryStage);
+                                }
+                                if (event.getCode() == KeyCode.DIGIT1){
+                                    Config.pane.getChildren().remove(menuView);
                                     MachineGunTower tower = new MachineGunTower(Config.x_pos, Config.y_pos, bullet2);
                                     tower.towerBuild(primaryStage);
                                 }
                             }
-                        }
+                        });
                     }
                 }
             }
         });
-    }
 
 
     public void enemyAdd(Enemy enemy){
